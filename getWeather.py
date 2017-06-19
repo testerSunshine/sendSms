@@ -28,8 +28,8 @@ class Weather(object):
             sleep(1)
 
     def sendMessageByTemperature(self):
-        self.message.append("新的一天又来啦，给小主念早安早安早安，重要的事情说三遍，今天是{}\n".format(self.weatherInfo["date"]))
-        self.message.append("%s最高温度 %s，最低温度 %s\n" % (self.city_name, self.weatherInfo["high"].split(" ")[1], self.weatherInfo["low"].split(" ")[1]))
+        self.message.append("新的一天又来啦，给小主念早安早安早安，重要的事情说三遍，今天是{}".format(self.weatherInfo["date"]))
+        self.message.append("%s最高温度 %s，最低温度 %s" % (self.city_name, self.weatherInfo["high"].split(" ")[1], self.weatherInfo["low"].split(" ")[1]))
 
     def sendMessageByType(self):
         if self.weatherInfo["type"] == "晴" or self.weatherInfo["type"] == "晴转多云" or self.weatherInfo["type"] == "多云":
@@ -57,7 +57,6 @@ class Weather(object):
         self.sendMessageByTemperature()
         self.sendMessageByType()
         return "".join(self.message)
-
 
 if __name__ == '__main__':
     w = Weather("长沙")
