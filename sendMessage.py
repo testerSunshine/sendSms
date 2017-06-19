@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 import os
 import urllib2
+from time import sleep
 
 import yaml
 import myUrllib
@@ -33,14 +34,14 @@ class sendMessage(object):
         else:
             return 1
 
-    def _sendInfo(self, content):
+    def _sendInfo(self, content, phone):
         """
         发送短信内容
         :return: 0 代表发送成功 1 代表发送失败
         """
         content = content.encode("utf-8")
         content = urllib2.quote(content)
-        sendUrl = "http://web.cr6868.com/asmx/smsservice.aspx?name={}&pwd={}&content={}&mobile={}&stime=&sign={}&type=pt&extno=".format(self.name, self.pwd, content, self.phone, self.sign)
+        sendUrl = "http://web.cr6868.com/asmx/smsservice.aspx?name={}&pwd={}&content={}&mobile={}&stime=&sign={}&type=pt&extno=".format(self.name, self.pwd, content, phone, self.sign)
         # sendUrl = "http://web.cr6868.com/asmx/smsservice.aspx"
         # data = {
         #     "name": self.name,
@@ -77,12 +78,14 @@ class sendMessage(object):
     def main(self):
         balance = self._getBalance()
         if int(balance) == 0:
-            content = Weather(self.weather["city_name"]).main()
-            status = self._sendInfo(content)
-            if status == 0:
-                print("当前短信发送成功，发送内容为：{}".format(content))
-            else:
-                print("当前短信发送失败，可能有敏感字符，发送内容为：{}".format(content))
+            for i in range(len(self.phone)):
+                content = Weather(self.weather["city_name"][i]).main()
+                status = self._sendInfo(content, self.phone[i])
+                if status == 0:
+                    print("当前短信发送成功，发送的手机号为：{} 发送内容为：{}".format(self.phone[i], content))
+                else:
+                    print("当前短信发送失败，可能有敏感字符，发送内容为：{}".format(content))
+                sleep(1)
         elif int(balance) == 1:
             print("余额不足")
 
